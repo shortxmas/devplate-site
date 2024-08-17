@@ -58,15 +58,13 @@ const Devplates = () => {
 
   return (
     <>
-      <div className="container" style={{ marginTop: 200 }}>
+      <div className="container" style={{ marginTop: 175 }}>
         <div className="row align-items-end mb-4 pb-2">
           <div className="col-md-12">
             <div className="section-title text-center text-md-start">
-              <h4 className="title mb-4">Find the perfect jobs</h4>
+              <h4 className="title mb-4">Search</h4>
               <p className="text-muted mb-0 para-desc">
-                Start work with Leaping. Build responsive, mobile-first projects
-                on the web with the world's most popular front-end component
-                library.
+                Search for keywords in a Devplate you want.
               </p>
             </div>
           </div>
