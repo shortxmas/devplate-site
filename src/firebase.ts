@@ -4,6 +4,7 @@ import { getDatabase, ref, get } from "firebase/database";
 export interface Devplate {
   name: string;
   url: string;
+  tags: string[];
 }
 
 const firebaseConfig = {
@@ -31,6 +32,60 @@ const toGithubApIurl = (repoUrl: string): string | null => {
   }
 };
 
+const keywords = [
+  "React",
+  "Angular",
+  "Vue",
+  "Svelte",
+  "Node.js",
+  "Express",
+  "Python",
+  "Django",
+  "Flask",
+  "JavaScript",
+  "TypeScript",
+  "HTML",
+  "CSS",
+  "Java",
+  "Spring",
+  "Ruby",
+  "Rails",
+  "Go",
+  "Rust",
+  "C#",
+  "ASP.NET",
+  "SQL",
+  "NoSQL",
+  "MongoDB",
+  "PostgreSQL",
+  "MySQL",
+  "Docker",
+  "Kubernetes",
+  "GraphQL",
+  "REST",
+  "Jest",
+  "Mocha",
+  "Cypress",
+  "Webpack",
+  "Babel",
+  "Gulp",
+  "Grunt",
+  "Bootstrap",
+  "Tailwind",
+  "Sass",
+  "Less",
+];
+
+const extractKeywords = (input: string): string[] => {
+  const normalizedInput = input.toLowerCase().replace(/-/g, " ");
+  const inputWords = normalizedInput.split(/\s+/);
+  const matches = keywords.filter((keyword) => {
+    const lowerKeyword = keyword.toLowerCase();
+    return inputWords.some((word) => word.includes(lowerKeyword));
+  });
+  return matches;
+};
+
 export const getDevplates = async (): Promise<Devplate[]> => {
   const dbRef = ref(database, "repositories");
   const ret: Devplate[] = [];
@@ -51,8 +106,9 @@ export const getDevplates = async (): Promise<Devplate[]> => {
       }
       const jsonData = await response.json();
 
-      jsonData.forEach((devplate: any) => {
-        ret.push({ url: url, name: devplate.name });
+      jsonData.forEach((devplate: Devplate) => {
+        const tags: string[] = extractKeywords(devplate.name);
+        ret.push({ url: url, name: devplate.name, tags: tags });
       });
     } catch (error) {
       console.error(error);

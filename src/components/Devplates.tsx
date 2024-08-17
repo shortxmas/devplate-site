@@ -72,7 +72,7 @@ const Devplates = () => {
         <div className="row">
           {devplates.map((val, key) => (
             <>
-              <DevplateCard key={key} title={val.name} tags={[]} />
+              <DevplateCard key={key} title={val.name} tags={val.tags} />
             </>
           ))}
         </div>
