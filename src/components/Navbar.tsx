@@ -8,7 +8,7 @@ const Navbar = () => {
         <div className="container d-flex justify-content-center">
           <div className="row">
             <div className="col-12 d-flex justify-content-center">
-              <a href="#">
+              <a href="./index.html">
                 <LoadingImage
                   imageUri="https://firebasestorage.googleapis.com/v0/b/devplate-1cf7c.appspot.com/o/dp3.png?alt=media&token=bf6d20a5-2f49-4b0f-b1cd-7ad7b7159b94"
                   height="60"
@@ -21,7 +21,7 @@ const Navbar = () => {
                   <li className="navbar-item">
                     <a
                       className="nav-link mx-2"
-                      href="#!"
+                      href="./devplates.html"
                       style={{ color: "#ADD8E6" }}
                     >
                       <svg
@@ -40,7 +40,8 @@ const Navbar = () => {
                   <li className="navbar-item">
                     <a
                       className="nav-link mx-2"
-                      href="#!"
+                      href="https://github.com/shortxmas/devplate"
+                      target="_blank"
                       style={{ color: "#ADD8E6" }}
                     >
                       <svg
