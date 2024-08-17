@@ -15,7 +15,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 const database = getDatabase(app);
 
 const toGithubApIurl = (repoUrl: string): string | null => {
@@ -37,8 +36,9 @@ export const getDevplates = async (): Promise<Devplate[]> => {
   const ret: Devplate[] = [];
 
   const snapshot = await get(dbRef);
+  const urls = Object.values(snapshot.val()) as string[];
 
-  Object.values(snapshot.val()).map(async (url: string) => {
+  for (const url of urls) {
     try {
       const fetchUrl = toGithubApIurl(url);
 
@@ -49,13 +49,15 @@ export const getDevplates = async (): Promise<Devplate[]> => {
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
-      const jsonData: Devplate[] = await response.json();
-      jsonData.forEach((devplate) => {
+      const jsonData = await response.json();
+
+      jsonData.forEach((devplate: any) => {
         ret.push({ url: url, name: devplate.name });
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-  });
+  }
+
   return ret;
 };
