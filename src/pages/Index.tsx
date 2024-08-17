@@ -1,13 +1,12 @@
 import * as React from "react";
-import ExampleComponent from "../components/ExampleComponent";
 import { createRoot } from "react-dom/client";
+import Navbar from "../components/Navbar";
 
 const Index = () => {
   return (
     <>
       <div className="container text-left">
-        This is the index page.
-        <ExampleComponent />
+        <Navbar />
       </div>
     </>
   );
