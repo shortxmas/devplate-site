@@ -3,6 +3,7 @@ import { getDatabase, ref, get } from "firebase/database";
 
 export interface Devplate {
   name: string;
+  author: string;
   url: string;
   tags: string[];
 }
@@ -27,6 +28,19 @@ const toGithubApIurl = (repoUrl: string): string | null => {
     const owner = match[1];
     const repo = match[2];
     return `https://api.github.com/repos/${owner}/${repo}/contents`;
+  } else {
+    return null;
+  }
+};
+
+const getRepositoryAuthor = (repoUrl: string): string | null => {
+  const githubUrlRegex =
+    /^(?:https?:\/\/)?(?:www\.)?github\.com\/([^\/]+)\/([^\/]+)$/i;
+  const match = repoUrl.match(githubUrlRegex);
+
+  if (match && match.length === 3) {
+    const owner = match[1];
+    return owner;
   } else {
     return null;
   }
@@ -96,6 +110,7 @@ export const getDevplates = async (): Promise<Devplate[]> => {
   for (const url of urls) {
     try {
       const fetchUrl = toGithubApIurl(url);
+      const author = getRepositoryAuthor(url);
 
       if (!fetchUrl) {
         throw new Error("Failed to fetch data");
@@ -108,7 +123,7 @@ export const getDevplates = async (): Promise<Devplate[]> => {
 
       jsonData.forEach((devplate: Devplate) => {
         const tags: string[] = extractKeywords(devplate.name);
-        ret.push({ url: url, name: devplate.name, tags: tags });
+        ret.push({ url: url, name: devplate.name, tags: tags, author: author });
       });
     } catch (error) {
       console.error(error);
