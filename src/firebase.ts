@@ -9,7 +9,6 @@ export interface Devplate {
 }
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBp0P6mrbmEXHxy7nR9gWndXOqTekesNAE",
   databaseURL: "https://devplate-1cf7c-default-rtdb.firebaseio.com",
   projectId: "devplate-1cf7c",
   messagingSenderId: "413404523011",
