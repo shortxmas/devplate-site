@@ -88,6 +88,7 @@ const keywords = [
   "Tailwind",
   "Sass",
   "Less",
+  "Node"
 ];
 
 const extractKeywords = (input: string): string[] => {

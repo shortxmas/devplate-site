@@ -16,12 +16,20 @@ interface DevplateCardProps {
 
 const Devplates = () => {
   const [devplates, setDevplates] = useState<Devplate[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [devplatesFailed, setDevplatesFailed] = useState<boolean>(false);
 
   useEffect(() => {
-    getDevplates().then((val) => {
-      setDevplates(val);
-      console.log(val);
-    });
+    try {
+      getDevplates().then((val) => {
+        setDevplates(val);
+        setIsLoading(false);
+      });
+    } catch (e) {
+      console.log(e);
+      setIsLoading(false);
+      setDevplatesFailed(true);
+    }
   }, []);
 
   const TagBubble = (props: TagBubbleProps) => {
@@ -111,17 +119,30 @@ const Devplates = () => {
           </div>
         </div>
         <div className="row">
-          {devplates.map((val, key) => (
+          {!isLoading ? (
             <>
-              <DevplateCard
-                key={key}
-                title={val.name}
-                tags={val.tags}
-                author={val.author}
-                url={val.url}
-              />
+              {devplates.map((val, key) => (
+                <>
+                  <DevplateCard
+                    key={key}
+                    title={val.name}
+                    tags={val.tags}
+                    author={val.author}
+                    url={val.url}
+                  />
+                </>
+              ))}
             </>
-          ))}
+          ) : (
+            <>
+              <div className="d-flex justify-content-center">
+                <div className="spinner-border my-3"></div>
+              </div>
+            </>
+          )}
+          {devplatesFailed ? (
+            <>Something went wrong fetching the Devplates!</>
+          ) : null}
         </div>
       </div>
     </>
