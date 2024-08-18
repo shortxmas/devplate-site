@@ -21,7 +21,7 @@ const Navbar = () => {
                   <li className="navbar-item">
                     <a
                       className="nav-link mx-2"
-                      href="./devplates.html"
+                      href="#devplates"
                       style={{ color: "#ADD8E6" }}
                     >
                       <svg

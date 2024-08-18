@@ -107,7 +107,11 @@ const Devplates = () => {
 
   return (
     <>
-      <div className="container" style={{ marginTop: 175, marginBottom: 175 }}>
+      <div
+        id="devplates"
+        className="container mt-5"
+        style={{ marginBottom: 175 }}
+      >
         <div className="row align-items-end mb-4 pb-2">
           <div className="col-md-12">
             <div className="section-title text-center text-md-start">
