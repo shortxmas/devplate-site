@@ -9,9 +9,7 @@ export interface Devplate {
 }
 
 const firebaseConfig = {
-  databaseURL: "https://devplate-1cf7c-default-rtdb.firebaseio.com",
   projectId: "devplate-1cf7c",
-  messagingSenderId: "413404523011",
   appId: "1:413404523011:web:080ceed868908f33c67c36",
 };
 
