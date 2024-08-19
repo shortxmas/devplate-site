@@ -19,11 +19,17 @@ const Devplates = () => {
   const [devplates, setDevplates] = useState<Devplate[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [devplatesFailed, setDevplatesFailed] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredDevplates, setFilteredDevplates] =
+    useState<Devplate[]>(devplates);
 
   useEffect(() => {
     try {
       getDevplates().then((val) => {
-        setDevplates(val);
+        const sortedDevplates = [...val].sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+        setDevplates(sortedDevplates);
         setIsLoading(false);
       });
     } catch (e) {
@@ -32,6 +38,33 @@ const Devplates = () => {
       setDevplatesFailed(true);
     }
   }, []);
+
+  useEffect(() => {
+    setFilteredDevplates(filterDevplatesByTags(devplates, searchTerm));
+  }, [devplates, searchTerm]);
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const term = event.target.value;
+    setSearchTerm(term);
+    setFilteredDevplates(filterDevplatesByTags(devplates, term));
+  };
+
+  const filterDevplatesByTags = (
+    devplates: Devplate[],
+    searchTerm: string
+  ): Devplate[] => {
+    if (!searchTerm) {
+      return devplates;
+    }
+    const searchTags = searchTerm.toLowerCase().split(/\s+/);
+    return devplates.filter((devplate) =>
+      searchTags.every((tag) =>
+        devplate.tags.some((devplateTag) =>
+          devplateTag.toLowerCase().includes(tag)
+        )
+      )
+    );
+  };
 
   const copyPullCommand = (pullCommand: string): void => {
     navigator.clipboard.writeText(pullCommand);
@@ -162,17 +195,28 @@ const Devplates = () => {
         <div className="row align-items-end mb-4 pb-2">
           <div className="col-md-12">
             <div className="section-title text-center text-md-start">
-              <h4 className="title mb-4">Search</h4>
-              <p className="text-muted mb-0 para-desc">
+              <h4 className="title mb-2">Search</h4>
+              <p className="text-muted mb-2 para-desc">
                 Search for keywords in a Devplate you want.
               </p>
             </div>
           </div>
+          <div className="input-group ">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Devplate keywords"
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+            <span className="input-group-text">Search</span>
+          </div>
         </div>
+
         <div className="row">
           {!isLoading ? (
             <>
-              {devplates.map((val, key) => (
+              {filteredDevplates.map((val, key) => (
                 <>
                   <DevplateCard
                     key={key}
