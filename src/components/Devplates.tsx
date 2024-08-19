@@ -12,6 +12,7 @@ interface DevplateCardProps {
   tags: string[];
   author: string;
   url: string;
+  pullCommand: string;
 }
 
 const Devplates = () => {
@@ -32,10 +33,15 @@ const Devplates = () => {
     }
   }, []);
 
+  const copyPullCommand = (pullCommand: string): void => {
+    navigator.clipboard.writeText(pullCommand);
+    alert("Copied Devplate pull command : " + pullCommand);
+  };
+
   const TagBubble = (props: TagBubbleProps) => {
     return (
       <>
-        <span className={`badge bg-primary me-1`}>{props.title}</span>
+        <span className="badge bg-primary me-1">{props.title}</span>
       </>
     );
   };
@@ -76,8 +82,12 @@ const Devplates = () => {
                 })}
               </div>
               <div className="mt-3">
-                <a href={props.url} target="_blank" className="btn btn-success">
-                  Go to Devplate{" "}
+                <a
+                  href={props.url}
+                  target="_blank"
+                  className="btn btn-success me-1 mb-3"
+                >
+                  Devplate{" "}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="13"
@@ -97,6 +107,28 @@ const Devplates = () => {
                     />
                   </svg>
                 </a>
+
+                <div className="input-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="BTC Address..."
+                    aria-label="BTC Address"
+                    aria-describedby="btn01"
+                    value={props.pullCommand}
+                    readOnly
+                  />
+                  <button
+                    className="btn btn-secondary"
+                    type="button"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="Copy to Clipboard"
+                    onClick={()=>{copyPullCommand(props.pullCommand)}}
+                  >
+                    Copy
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -133,6 +165,7 @@ const Devplates = () => {
                     tags={val.tags}
                     author={val.author}
                     url={val.url}
+                    pullCommand={val.pullCommand}
                   />
                 </>
               ))}

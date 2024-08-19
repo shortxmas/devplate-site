@@ -6,6 +6,13 @@ export interface Devplate {
   author: string;
   url: string;
   tags: string[];
+  pullCommand: string;
+}
+
+interface DevplateRepoInfo {
+  url: string;
+  author: string;
+  repository: string;
 }
 
 const firebaseConfig = {
@@ -16,7 +23,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-const toGithubApIurl = (repoUrl: string): string | null => {
+const toDevplateRepoInfo = (repoUrl: string): DevplateRepoInfo | null => {
   const githubUrlRegex =
     /^(?:https?:\/\/)?(?:www\.)?github\.com\/([^\/]+)\/([^\/]+)$/i;
   const match = repoUrl.match(githubUrlRegex);
@@ -24,20 +31,11 @@ const toGithubApIurl = (repoUrl: string): string | null => {
   if (match && match.length === 3) {
     const owner = match[1];
     const repo = match[2];
-    return `https://api.github.com/repos/${owner}/${repo}/contents`;
-  } else {
-    return null;
-  }
-};
-
-const getRepositoryAuthor = (repoUrl: string): string | null => {
-  const githubUrlRegex =
-    /^(?:https?:\/\/)?(?:www\.)?github\.com\/([^\/]+)\/([^\/]+)$/i;
-  const match = repoUrl.match(githubUrlRegex);
-
-  if (match && match.length === 3) {
-    const owner = match[1];
-    return owner;
+    return {
+      url: `https://api.github.com/repos/${owner}/${repo}/contents`,
+      author: owner,
+      repository: repo,
+    };
   } else {
     return null;
   }
@@ -85,7 +83,7 @@ const keywords = [
   "Tailwind",
   "Sass",
   "Less",
-  "Node"
+  "Node",
 ];
 
 const extractKeywords = (input: string): string[] => {
@@ -107,8 +105,10 @@ export const getDevplates = async (): Promise<Devplate[]> => {
 
   for (const url of urls) {
     try {
-      const fetchUrl = toGithubApIurl(url);
-      const author = getRepositoryAuthor(url);
+      const repoInfo = toDevplateRepoInfo(url);
+      const fetchUrl = repoInfo.url;
+      const author = repoInfo.author;
+      const repo = repoInfo.repository;
 
       if (!fetchUrl) {
         throw new Error("Failed to fetch data");
@@ -121,7 +121,13 @@ export const getDevplates = async (): Promise<Devplate[]> => {
 
       jsonData.forEach((devplate: Devplate) => {
         const tags: string[] = extractKeywords(devplate.name);
-        ret.push({ url: url, name: devplate.name, tags: tags, author: author });
+        ret.push({
+          url: url,
+          name: devplate.name,
+          tags: tags,
+          author: author,
+          pullCommand: `dp pull ${author}/${repo}/${devplate.name}`,
+        });
       });
     } catch (error) {
       console.error(error);
