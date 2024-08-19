@@ -120,7 +120,7 @@ const Devplates = () => {
                   target="_blank"
                   className="btn btn-success me-1 mb-3"
                 >
-                  Devplate{" "}
+                  Devplate Repository{" "}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="13"
