@@ -124,7 +124,9 @@ const Devplates = () => {
                     data-bs-toggle="tooltip"
                     data-bs-placement="bottom"
                     title="Copy to Clipboard"
-                    onClick={()=>{copyPullCommand(props.pullCommand)}}
+                    onClick={() => {
+                      copyPullCommand(props.pullCommand);
+                    }}
                   >
                     Copy
                   </button>
